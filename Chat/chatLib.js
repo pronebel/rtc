@@ -13,7 +13,7 @@
 	exports.PORT = 8000;
 
 	// 服务端口
-	exports.HOST = "192.168.175.103";
+	exports.HOST = "dev.dustjs.net";
 
 	var analyzeMessageData = exports.analyzeMessageData = function(message) {
 			try {

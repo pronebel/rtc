@@ -14,7 +14,7 @@
 
 	// 服务端口 
 	// need to alter to your ip adress
-	exports.HOST = "localhost";
+	exports.HOST = "dev.dustjs.net";
 
 	var analyzeMessageData = exports.analyzeMessageData = function(message) {
 			try {
