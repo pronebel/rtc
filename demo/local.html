@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<audio autoplay="autoplay" controls></audio>
+
+
+<script>
+
+    var RTC = {
+        init:function(){
+            var _nav = navigator;
+            navigator.getUserMedia = _nav.getUserMedia ||
+                    _nav.webkitGetUserMedia ||
+                    _nav.mozGetUserMedia;
+
+        },
+        getMediaUrl:function(stream){
+            if(window.URL){//CHROME
+                return window.URL.createObjectURL(stream);
+            }else{//firefox.opera
+                return stream;
+            }
+        },
+        monitor:function(config,succ,fail){
+            succ = succ || function(){};
+            fail = fail || function(err){console.log(err);};
+            navigator.getUserMedia(config,succ,fail);
+        }
+    }
+
+    RTC.init();
+
+
+    var constraints = {
+        audio:true,
+        video:true
+    }
+
+    var audioObj = document.querySelector("audio");
+
+  RTC.monitor(constraints,function(stream){
+      window.stream = stream;
+      audioObj.src = RTC.getMediaUrl(stream);
+      audioObj.play();
+  });
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

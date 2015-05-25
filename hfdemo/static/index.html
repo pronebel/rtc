@@ -1,0 +1,71 @@
+<!doctype html>
+<head>
+    <!-- 字符集编码 -->
+    <meta charset="utf-8">
+    <!-- 兼容性模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 页面标题 -->
+    <title></title>
+    <!-- 作者 -->
+    <meta name="author" content="shuyi.wu" />
+    <!-- 页面内容简介 有助于搜索引擎分析 -->
+    <meta name="description" content="" />
+    <!-- 所属 -->
+    <meta name="Copyright" content="wushuyi" />
+    <!-- 移动端视图 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 页面标题图标 -->
+    <link rel="shortcut icon" href="favicon.ico" />
+    <!-- css头部加载 有助于 浏览器 渲染 -->
+    <link rel="stylesheet" href="assets/css/reset.css" /><!-- css 重置 -->
+    <link rel="stylesheet" href="assets/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+</head>
+
+<body>
+<!-- 为何要用这个 div? 请看http://camendesign.com/code/developpeurs_sans_frontieres -->
+<div class="wrapper">
+    <div style="width:500px;margin:50px auto;">
+        <div class="form-inline" id="contentBox" style="display:block;">
+            <div class="form-group">
+                <input type="text" class="form-control" value="http://localhost:3000/" id="content" placeholder="输入链接地址">
+                <button type="button" class="btn btn-primary" id="J_btnConnectServer">连接服务器</button>
+            </div>
+        </div>
+        <div id="J_connectArea"   style="display:none;">
+            <div class="form-inline" >
+                <div class="form-group">
+                    <input type="text" class="form-control" id="J_remoteId" placeholder="输入连接Id">
+                    <button type="button" class="btn btn-primary" id="J_btnConnectRemote">连接第三方</button>
+                </div>
+            </div>
+            <div class="form-inline"  style="margin-top: 10px;" >
+                <div class="form-group">
+                    <label for="selfId">我的ID: </label><span  id="selfId"></span>
+                </div>
+            </div>
+            <div id="videoBox" >
+                <video id="localVideo" autoplay="true" ></video>
+                <!--muted="true"-->
+                <video id="remoteVideo" autoplay="true"></video>
+            </div>
+        </div>
+        <div id="rtcCltBox" style="display:none;">
+            <button type="button" class="btn btn-primary" id="rtcCall">连接WebRTC</button>
+            <button type="button" class="btn btn-primary" id="rtcHang">断开WebRTC</button>
+        </div>
+
+    </div>
+</div>
+<!-- js 紧贴</body> 页面渲染完成 后处理 js 有助于 加快 页面响应速度 -->
+<script src='assets/libs/jquery/1.11.2/jquery.min.js'></script>
+<script src="assets/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="assets/libs/socket.io/1.3.2/socket.io.js"></script>
+
+
+
+<script src="assets/js/rtcpeerconn.js"></script>
+<script src="assets/js/functions.js"></script>
+</body>
+</html>

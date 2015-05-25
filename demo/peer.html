@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.css"/>
+
+
+
+    <style>
+
+
+        video {
+            max-width: 320px;
+            max-height: 320px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+<table>
+    <tr>
+        <th>Local Video</th><th>远程Video</th>
+    </tr>
+
+
+    <tr>
+        <td><video id="J_localV" autoplay="autoplay"></video></td>
+        <td><video id="J_RemoteV" autoplay="autoplay"></video></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+
+            <button id="J_start">开始</button>
+            <button id="J_call">Call</button>
+            <button id="J_hangup">挂起</button>
+
+        </td>
+    </tr>
+</table>
+
+
+
+<script src="js/jquery.js"></script>
+<script src="js/rtc.js"></script>
+<script>
+
+    var localStream, localPeerConnection, remotePeerConnection;
+
+    var localVideo = document.getElementById("J_localV");
+    var remoteVideo = document.getElementById("J_RemoteV");
+
+
+    var startButton = document.getElementById("J_start");
+    var callButton = document.getElementById("J_call");
+    var hangupButton = document.getElementById("J_hangup");
+
+
+    startButton.disabled = false;
+    callButton.disabled = true;
+    hangupButton.disabled = true;
+
+
+    startButton.onclick = localStart;
+    callButton.onclick = call;
+    hangupButton.onclick = hangup;
+
+
+    function localStart() {
+        log("Requesting local stream");
+
+        startButton.disabled = true;
+
+
+        RTC.monitor({audio:false, video:true}, function(stream){
+            log("Received local stream");
+            localVideo.src = RTC.getMediaUrl(stream);
+            localStream = stream;
+            callButton.disabled = false;
+        })
+
+    }
+
+    function call() {
+
+        callButton.disabled = true;
+        hangupButton.disabled = false;
+        log("Starting call");
+
+        RTC.showLabel(localStream);
+
+        var servers = null;
+
+        localPeerConnection = new RTCPeerConnection(servers);
+
+
+        localPeerConnection.onicecandidate =  function (event){
+            if (event.candidate) {
+
+                remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+                log("Local ICE candidate: \n" + event.candidate.candidate);
+            }
+        };
+
+
+
+        remotePeerConnection = new RTCPeerConnection(servers);
+        log("Created remote peer connection object remotePeerConnection");
+        // Add a handler associated with ICE protocol events...
+        remotePeerConnection.onicecandidate =function (event){
+            if (event.candidate) {
+                // Add candidate to the local PeerConnection
+                localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+                log("Remote ICE candidate: \n " + event.candidate.candidate);
+            }
+        } ;
+
+
+
+        // ...and a second handler to be activated as soon as the remote stream becomes available
+        remotePeerConnection.onaddstream =    function (event){
+            remoteVideo.src = RTC.getMediaUrl(event.stream);
+            log("Received remote stream");
+        };
+
+        // Add the local stream (as returned by getUserMedia() to the local PeerConnection
+        localPeerConnection.addStream(localStream);
+
+
+        log("Added localStream to localPeerConnection");
+
+        // We're all set! Create an Offer to be 'sent' to the callee as soon as the local SDP is ready
+        localPeerConnection.createOffer(function (description){
+                    // Add the local description to the local PeerConnection
+                    localPeerConnection.setLocalDescription(description);
+                    log("Offer from localPeerConnection: \n" + description.sdp);
+
+                    // ...do the same with the 'pseudo-remote' PeerConnection
+                    // Note well: this is the part that will have to be changed if you want the communicating peers to become
+                    // remote (which calls for the setup of a proper signaling channel)
+                    remotePeerConnection.setRemoteDescription(description);
+
+                    // Create the Answer to the received Offer based on the 'local' description
+                    remotePeerConnection.createAnswer(  function (description){
+                        // Set the 'remote' description as the local description of the remote PeerConnection
+                        remotePeerConnection.setLocalDescription(description);
+                        log("Answer from remotePeerConnection: \n" + description.sdp);
+                        // Conversely, set the 'remote' description as the remote description of the local PeerConnection
+                        localPeerConnection.setRemoteDescription(description);
+                    }, logError);
+                }, logError);
+    }
+
+
+    function hangup() {
+
+        RTC.disconnect(localPeerConnection);
+        RTC.disconnect(remotePeerConnection);
+
+        hangupButton.disabled = true;
+        callButton.disabled = false;
+    }
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

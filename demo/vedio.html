@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<video autoplay="autoplay" controls></video>
+
+
+
+<script src="js/rtc.js"></script>
+<script>
+
+
+
+
+    var constraints = {
+        audio:false,
+        video:true
+    }
+
+
+    var audioObj = document.querySelector("video");
+  RTC.monitor(constraints,function(stream){
+      window.stream = stream;
+      audioObj.src = RTC.getMediaUrl(stream);
+      audioObj.play();
+  });
+
+
+
+</script>
+
+
+
+
+</body>
+</html>
