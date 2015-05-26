@@ -153,7 +153,7 @@
         var room = window.location.hash.slice(1);
         //need to alter to your ip address
         //When using localhost
-        rtc.connect("ws://dev.dustjs.net:8001", room);
+        rtc.connect("ws://121.40.133.10:8000:8001", room);
 
         rtc.on('add remote stream', function(stream, socketId) {
           console.log("ADDING REMOTE STREAM...");
