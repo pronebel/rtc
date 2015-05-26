@@ -14,7 +14,7 @@
 
 	// 服务端口 
 	// need to alter to your ip adress
-	exports.HOST = "121.40.133.10:8000";
+	exports.HOST = "121.40.133.10";
 
 	var analyzeMessageData = exports.analyzeMessageData = function(message) {
 			try {
