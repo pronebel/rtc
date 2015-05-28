@@ -21,6 +21,13 @@
     <link rel="stylesheet" href="assets/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="assets/css/style.css" />
 
+    <style>
+        #videoBox {position: relative;width:360px;}
+        #localVideo {width:50px;position: absolute;right:0;bottom: 0;border:1px solid #ccc;}
+        #remoteVideo {width:360px;}
+
+    </style>
+
 </head>
 
 <body>
@@ -45,16 +52,17 @@
                     <label for="selfId">我的ID: </label><span  id="selfId"></span>
                 </div>
             </div>
+            <div id="rtcCltBox" style="display:none;">
+                <button type="button" class="btn btn-primary" id="rtcCall">连接WebRTC</button>
+                <button type="button" class="btn btn-primary" id="rtcHang">断开WebRTC</button>
+            </div>
             <div id="videoBox" >
                 <video id="localVideo" muted="muted" autoplay="true" ></video>
                 <!--muted="true"-->
                 <video id="remoteVideo" autoplay="true"></video>
             </div>
         </div>
-        <div id="rtcCltBox" style="display:none;">
-            <button type="button" class="btn btn-primary" id="rtcCall">连接WebRTC</button>
-            <button type="button" class="btn btn-primary" id="rtcHang">断开WebRTC</button>
-        </div>
+
 
     </div>
 </div>
